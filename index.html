@@ -193,13 +193,13 @@
                 },
                 mouseover: highlightFeature,
             });
-            var popupContent = '<div style="text-align: center;">\
-      <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">' +
-          (feature.properties['Nama Lokas'] !== null ? autolinker.link(String(feature.properties['Nama Lokas']).replace(/'/g, '\'').toLocaleString()) : '') +
-      '</div>' +
-      (feature.properties['FOTO'] !== null ? '<img style="height: 300px; width: 300px; object-fit: cover;" src="images/' +
-          String(feature.properties['FOTO']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') +
-  '</div>';
+           var popupContent = '<div style="text-align: center;">\
+    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">' +
+        (feature.properties['Nama Lokas'] !== null ? autolinker.link(String(feature.properties['Nama Lokas']).replace(/'/g, '\'').toLocaleString()) : '') +
+    '</div>' +
+    (feature.properties['FOTO'] !== null ? '<img style="max-width: 100%; height: auto; border-radius: 8px;" src="images/' + 
+        String(feature.properties['FOTO']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') +
+'</div>';
 
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
 			layer.on('popupopen', function(e) {
