@@ -1,0 +1,1 @@
+var json_Pelabuhan_4 = {"type":"FeatureCollection","name":"Pelabuhan_4","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"Nama":"Pelabuhan Terminal Penumpang Waingapu","X":120.2505,"Y":-9.63794},"geometry":{"type":"Point","coordinates":[120.2505,-9.63794]}}]}

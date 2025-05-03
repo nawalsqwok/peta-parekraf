@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
         <style>
         html, body, #map {
             width: 100%;
@@ -18,7 +19,7 @@
             margin: 0;
         }
         </style>
-        <title>Peta Pariwisata & Ekonomi Kreatif</title>
+        <title>Peta Pariwisata dan Ekonomi Kreatif</title>
     </head>
     <body>
         <div id="map">
@@ -33,8 +34,10 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
+        <script src="js/leaflet-search.js"></script>
         <script src="data/InformasiWilayah_2.js"></script>
         <script src="data/DestinasiWisata_3.js"></script>
+        <script src="data/Pelabuhan_4.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -53,7 +56,7 @@
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[-10.531167367539949,119.14246039317275],[-9.214317784909964,121.7424482091174]]);
+        }).fitBounds([[-9.658600756746527,120.22564084623406],[-9.629723196206953,120.28385800828184]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -157,7 +160,7 @@
         rotationOrigin: 'center center',
         icon: L.icon({
             iconUrl: 'markers/InformasiWilayah_2.svg',
-            iconSize: [42.55999999999998, 42.55999999999998]
+            iconSize: [42.559999999999995, 42.559999999999995]
         }),
                 interactive: true,
             }
@@ -193,14 +196,14 @@
                 },
                 mouseover: highlightFeature,
             });
-            var popupContent = '<div style="text-align: center;">\
-      <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">' +
-          (feature.properties['Nama Lokas'] !== null ? autolinker.link(String(feature.properties['Nama Lokas']).replace(/'/g, '\'').toLocaleString()) : '') +
-      '</div>' +
-      (feature.properties['FOTO'] !== null ? '<img style="height: 300px; width: 300px; object-fit: cover;" src="images/' +
-          String(feature.properties['FOTO']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') +
-  '</div>';
-
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Nama Lokas'] !== null ? autolinker.link(String(feature.properties['Nama Lokas']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FOTO'] !== null ? '<img src="images/' + String(feature.properties['FOTO']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
 			layer.on('popupopen', function(e) {
 				addClassToPopupIfMedia(content, e.popup);
@@ -240,11 +243,67 @@
         });
         bounds_group.addLayer(layer_DestinasiWisata_3);
         map.addLayer(layer_DestinasiWisata_3);
+        function pop_Pelabuhan_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Nama'] !== null ? autolinker.link(String(feature.properties['Nama']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_Pelabuhan_4_0() {
+            return {
+                pane: 'pane_Pelabuhan_4',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/Pelabuhan_4.svg',
+            iconSize: [37.23999999999999, 37.23999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Pelabuhan_4');
+        map.getPane('pane_Pelabuhan_4').style.zIndex = 404;
+        map.getPane('pane_Pelabuhan_4').style['mix-blend-mode'] = 'normal';
+        var layer_Pelabuhan_4 = new L.geoJson(json_Pelabuhan_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Pelabuhan_4',
+            layerName: 'layer_Pelabuhan_4',
+            pane: 'pane_Pelabuhan_4',
+            onEachFeature: pop_Pelabuhan_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Pelabuhan_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Pelabuhan_4);
+        map.addLayer(layer_Pelabuhan_4);
         var overlaysTree = [
+            {label: '<img src="legend/Pelabuhan_4.png" /> Pelabuhan', layer: layer_Pelabuhan_4},
             {label: '<img src="legend/DestinasiWisata_3.png" /> Destinasi Wisata', layer: layer_DestinasiWisata_3},
             {label: '<img src="legend/InformasiWilayah_2.png" /> Informasi Wilayah', layer: layer_InformasiWilayah_2},
-            {label: "OSM Standard", layer: layer_OSMStandard_1},
-            {label: "ESRI Satellite", layer: layer_ESRISatellite_0},]
+            {label: "OSM Standard", layer: layer_OSMStandard_1, radioGroup: 'bm' },
+            {label: "ESRI Satellite", layer: layer_ESRISatellite_0, radioGroup: 'bm' },]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
             //selectorBack: false,
@@ -256,6 +315,13 @@
         });
         lay.addTo(map);
         setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_DestinasiWisata_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Nama Lokas'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
         </script>
     </body>
 </html>
